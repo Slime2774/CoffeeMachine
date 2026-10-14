@@ -1,0 +1,38 @@
+# Результаты сборки
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# Временные файлы Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Файлы NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Результаты тестов
+[Tt]est[Rr]esult*/
+*.coverage
+*.coveragexml
+coverage*.xml
+
+# Rider
+.idea/
+
+# Прочие временные файлы
+~$*
+*~
+*.tmp
+*.log
