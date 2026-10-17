@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CoffeeVendingMachine.Services;
+
 
 namespace CoffeeVendingMachine
 {
@@ -19,6 +21,14 @@ namespace CoffeeVendingMachine
         public MainWindow()
         {
             InitializeComponent();
+            //Гркзим список кофе из coffee.json
+            var coffees = CoffeeLoader.Load();
+
+            // DataContext - Сам строит карточки
+            DataContext = new
+            {
+                CoffeeList = coffees
+            };
         }
     }
 }
