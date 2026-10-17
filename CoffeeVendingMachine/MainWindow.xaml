@@ -79,7 +79,8 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource CoffeeCardStyle}"
-                                    Tag="{Binding}">
+                                    Tag="{Binding}"
+                                    MouseLeftButtonUp = "CoffeeCard_Click">
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="{Binding Icon}"
                                                FontSize="38"
