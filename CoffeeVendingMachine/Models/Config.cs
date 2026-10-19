@@ -13,6 +13,9 @@ namespace CoffeeVendingMachine.Models
 
         [JsonPropertyName("volume")]
         public int Volume { get; set; }
+
+        [JsonPropertyName("extraPrice")]
+        public decimal ExtraPrice { get; set; }
     }
 
     public class Config
@@ -30,7 +33,7 @@ namespace CoffeeVendingMachine.Models
         public decimal ExtraEspressoShotPrice { get; set; }
 
         //Список доступных объёмов
-        [JsonPropertyName("cupSize")]
+        [JsonPropertyName("cupSizes")]
         public List<CupSize> CupSizes { get; set; } = new();
     }
 

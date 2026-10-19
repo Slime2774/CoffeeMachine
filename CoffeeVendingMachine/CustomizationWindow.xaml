@@ -5,7 +5,6 @@
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="#F5E6D3">
 
     <Window.Resources>
-        <!-- Стили для заголовков и кнопок -->
         <Style TargetType="TextBlock" x:Key="HeaderStyle">
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="FontWeight" Value="Bold"/>
@@ -17,23 +16,24 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="#4B3621"/>
         </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,4,15,4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#4B3621"/>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- Шапка -->
             <RowDefinition Height="*"/>
-            <!-- Скролл с настройками -->
             <RowDefinition Height="Auto"/>
-            <!-- Цена и кнопки -->
         </Grid.RowDefinitions>
 
         <!-- Шапка -->
         <Border Grid.Row="0" Background="#6F4E37" CornerRadius="10" Padding="15">
             <StackPanel>
                 <TextBlock x:Name="CoffeeNameText" Text="Напиток" FontSize="22" FontWeight="Bold" Foreground="#FFF8F0" HorizontalAlignment="Center"/>
-                <!-- Здесь будет выводиться "Кофе (Arabica)" благодаря наследованию -->
                 <TextBlock x:Name="DrinkTypeText" Text="Тип" FontSize="14" Foreground="#D2B48C" HorizontalAlignment="Center"/>
             </StackPanel>
         </Border>
@@ -41,19 +41,16 @@
         <!-- Настройки -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
             <StackPanel>
-                <!-- Объем: сюда в C# коде будут добавлены RadioButton из config.json -->
                 <TextBlock Text="Объём:" Style="{StaticResource HeaderStyle}"/>
                 <WrapPanel x:Name="SizesPanel"/>
 
-                <!-- Крепость -->
                 <TextBlock Text="Крепость (доп. эспрессо):" Style="{StaticResource HeaderStyle}"/>
                 <WrapPanel>
-                    <RadioButton Content="Стандарт" IsChecked="True" Tag="0"/>
-                    <RadioButton Content="+1 шот" Tag="1"/>
-                    <RadioButton Content="+2 шота" Tag="2"/>
+                    <RadioButton x:Name="ShotStandard" Content="Стандарт" IsChecked="True" Tag="0" Checked="Option_Changed"/>
+                    <RadioButton x:Name="Shot1" Content="+1 шот" Tag="1" Checked="Option_Changed"/>
+                    <RadioButton x:Name="Shot2" Content="+2 шота" Tag="2" Checked="Option_Changed"/>
                 </WrapPanel>
 
-                <!-- Сахар -->
                 <TextBlock Text="Количество сахара:" Style="{StaticResource HeaderStyle}"/>
                 <WrapPanel>
                     <RadioButton Content="Без сахара" IsChecked="True"/>
@@ -62,24 +59,22 @@
                     <RadioButton Content="3 ложки"/>
                 </WrapPanel>
 
-                <!-- Сиропы (заголовок меняется в C# коде) -->
                 <TextBlock x:Name="SyrupHeader" Text="Сиропы:" Style="{StaticResource HeaderStyle}"/>
-                <WrapPanel>
-                    <CheckBox Content="Карамель" Margin="0,4,15,4"/>
-                    <CheckBox Content="Ваниль" Margin="0,4,15,4"/>
-                    <CheckBox Content="Лесной орех" Margin="0,4,15,4"/>
+                <WrapPanel x:Name="SyrupPanel">
+                    <CheckBox Content="Карамель" Tag="Карамель" Checked="Option_Changed" Unchecked="Option_Changed"/>
+                    <CheckBox Content="Ваниль" Tag="Ваниль" Checked="Option_Changed" Unchecked="Option_Changed"/>
+                    <CheckBox Content="Лесной орех" Tag="Лесной орех" Checked="Option_Changed" Unchecked="Option_Changed"/>
                 </WrapPanel>
 
-                <!-- Топпинги (заголовок меняется в C# коде) -->
                 <TextBlock x:Name="ToppingHeader" Text="Топпинги:" Style="{StaticResource HeaderStyle}"/>
-                <WrapPanel>
-                    <CheckBox Content="Корица" Margin="0,4,15,4"/>
-                    <CheckBox Content="Маршмеллоу" Margin="0,4,15,4"/>
+                <WrapPanel x:Name="ToppingPanel">
+                    <CheckBox Content="Корица" Tag="Корица" Checked="Option_Changed" Unchecked="Option_Changed"/>
+                    <CheckBox Content="Маршмеллоу" Tag="Маршмеллоу" Checked="Option_Changed" Unchecked="Option_Changed"/>
                 </WrapPanel>
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Итоговая цена и кнопки -->
+        <!-- Низ: Цена и Кнопки -->
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -87,7 +82,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock x:Name="TotalPriceText" Grid.Row="0" Text="Итого: 0 ₽" 
-                       FontSize="20" FontWeight="Bold" Foreground="#6F4E37" 
+                       FontSize="22" FontWeight="Bold" Foreground="#6F4E37" 
                        HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
             <Grid Grid.Row="1">
@@ -96,13 +91,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Добавили Grid.Column="0" и поменяли цвет текста на темный для контраста -->
                 <Button Grid.Column="0" Content="Отмена" Height="45" Margin="0,0,10,0" 
-            Background="#E8D5B7" Foreground="#4B3621" FontWeight="Bold" Click="Cancel_Click"/>
+                        Background="#E8D5B7" Foreground="#4B3621" FontWeight="Bold" Click="Cancel_Click"/>
 
-                <!-- Добавили Grid.Column="1" -->
                 <Button Grid.Column="1" Content="Оплатить" Height="45" Margin="10,0,0,0" 
-            Background="#6F4E37" Foreground="White" FontWeight="Bold" Click="Confirm_Click"/>
+                        Background="#6F4E37" Foreground="White" FontWeight="Bold" Click="Confirm_Click"/>
             </Grid>
         </Grid>
     </Grid>

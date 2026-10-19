@@ -1,17 +1,12 @@
 ﻿<Window x:Class="CoffeeVendingMachine.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        Title="Coffee Vending Machine"
-        Height="640" Width="820"
+        Title="Coffee Vending Machine" Height="640" Width="820"
         MinHeight="640" MinWidth="820"
         Background="#F5E6D3"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <!-- ===== Карточка кофе ===== -->
         <Style x:Key="CoffeeCardStyle" TargetType="Border">
             <Setter Property="Background" Value="#FFF8F0"/>
             <Setter Property="CornerRadius" Value="12"/>
@@ -36,16 +31,13 @@
         </Style>
     </Window.Resources>
 
-    <!-- ===== Корневой Grid ===== -->
     <Grid Margin="12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ===================================================== -->
-        <!-- ЛЕВАЯ ЧАСТЬ                                           -->
-        <!-- ===================================================== -->
+        <!-- ЛЕВАЯ ЧАСТЬ -->
         <Grid Grid.Column="0" Margin="0,0,10,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -54,50 +46,31 @@
             </Grid.RowDefinitions>
 
             <!-- Заголовок -->
-            <Border Grid.Row="0" Background="#6F4E37" CornerRadius="12"
-                    Padding="14,8" Margin="0,0,0,10">
+            <Border Grid.Row="0" Background="#6F4E37" CornerRadius="12" Padding="14,8" Margin="0,0,0,10">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Text="☕" FontSize="22" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock Text="COFFEE VENDING MACHINE"
-                               FontSize="18" FontWeight="Bold"
-                               Foreground="#FFF8F0" VerticalAlignment="Center"/>
+                    <TextBlock Text="COFFEE VENDING MACHINE" FontSize="18" FontWeight="Bold" Foreground="#FFF8F0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
 
-            <!-- Меню: карточки генерируются автоматически из CoffeeList -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
+            <!-- Меню -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl ItemsSource="{Binding CoffeeList}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Top"/>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource CoffeeCardStyle}"
-                                    Tag="{Binding}"
-                                    MouseLeftButtonUp = "CoffeeCard_Click">
+                            <Border Style="{StaticResource CoffeeCardStyle}" Tag="{Binding}" MouseLeftButtonUp="CoffeeCard_Click">
                                 <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Icon}"
-                                               FontSize="38"
-                                               HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding Name}"
-                                               FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="#4B3621"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center"
-                                               HorizontalAlignment="Center"
-                                               Margin="0,4,0,2"/>
-                                    <TextBlock Text="{Binding PriceText}"
-                                               FontSize="14"
-                                               FontWeight="Bold"
-                                               Foreground="#6F4E37"
-                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Icon}" FontSize="38" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold"
+                                               Foreground="#4B3621" TextWrapping="Wrap" TextAlignment="Center"
+                                               HorizontalAlignment="Center" Margin="0,4,0,2"/>
+                                    <TextBlock Text="{Binding PriceText}" FontSize="14" FontWeight="Bold"
+                                               Foreground="#6F4E37" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -113,100 +86,89 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Background="#E8D5B7" CornerRadius="10" Padding="10"
-                        Margin="0,0,5,0" BorderBrush="#D2B48C" BorderThickness="1.5">
+                <!-- Оплата картой -->
+                <Border Grid.Column="0" Background="#E8D5B7" CornerRadius="10" Padding="10" Margin="0,0,5,0" BorderBrush="#D2B48C" BorderThickness="1.5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
                             <TextBlock Text="💳" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock Text="Оплата картой" FontWeight="Bold" FontSize="12"
-                                       Foreground="#4B3621" VerticalAlignment="Center"/>
+                            <TextBlock Text="Оплата картой" FontWeight="Bold" FontSize="12" Foreground="#4B3621" VerticalAlignment="Center"/>
                         </StackPanel>
-                        <Rectangle Height="28" Fill="#FFF8F0" RadiusX="6" RadiusY="6"
-                                   Stroke="#A67B5B" StrokeThickness="1.5"/>
-                        <TextBlock Text="Приложите карту" Foreground="#8B6F47"
-                                   FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Rectangle Height="28" Fill="#FFF8F0" RadiusX="6" RadiusY="6" Stroke="#A67B5B" StrokeThickness="1.5"/>
+                        <TextBlock Text="Приложите карту" Foreground="#8B6F47" FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="1" Background="#FFF8F0" CornerRadius="10" Padding="10"
-                        Margin="5,0,5,0" BorderBrush="#A67B5B" BorderThickness="1.5">
+                <!-- Баланс -->
+                <Border Grid.Column="1" Background="#FFF8F0" CornerRadius="10" Padding="10" Margin="5,0,5,0" BorderBrush="#A67B5B" BorderThickness="1.5">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Внесено" Foreground="#8B6F47" FontSize="11"
-                                   HorizontalAlignment="Center"/>
-                        <TextBlock Text="0 ₽" FontSize="22" FontWeight="Bold"
-                                   Foreground="#6F4E37" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Выберите напиток" Foreground="#A67B5B"
-                                   FontSize="10" HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="Внесено" Foreground="#8B6F47" FontSize="11" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="InsertedMoneyText" Text="0 ₽" FontSize="22" FontWeight="Bold" Foreground="#6F4E37" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="StatusText" Text="Выберите напиток" Foreground="#A67B5B" FontSize="10" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="2" Background="#E8D5B7" CornerRadius="10" Padding="10"
-                        Margin="5,0,0,0" BorderBrush="#D2B48C" BorderThickness="1.5">
+                <!-- Купюроприемник -->
+                <Border Grid.Column="2" Background="#E8D5B7" CornerRadius="10" Padding="10" Margin="5,0,0,0" BorderBrush="#D2B48C" BorderThickness="1.5">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
                             <TextBlock Text="💵" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock Text="Купюроприёмник" FontWeight="Bold" FontSize="12"
-                                       Foreground="#4B3621" VerticalAlignment="Center"/>
+                            <TextBlock Text="Купюроприёмник" FontWeight="Bold" FontSize="12" Foreground="#4B3621" VerticalAlignment="Center"/>
                         </StackPanel>
-                        <Rectangle Height="28" Fill="#FFF8F0" RadiusX="6" RadiusY="6"
-                                   Stroke="#A67B5B" StrokeThickness="1.5"/>
-                        <TextBlock Text="Вставьте купюру" Foreground="#8B6F47"
-                                   FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,2">
+                            <Button Content="+50 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="50" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
+                            <Button Content="+100 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="100" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
+                            <Button Content="+500 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="500" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
+                        </StackPanel>
+                        <TextBlock Text="Нажмите, чтобы внести" Foreground="#8B6F47" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
             </Grid>
         </Grid>
 
-        <!-- ===================================================== -->
-        <!-- ПРАВАЯ ЧАСТЬ: ШАХТА ВЫДАЧИ                            -->
-        <!-- ===================================================== -->
+        <!-- ПРАВАЯ ЧАСТЬ (Шахта выдачи) -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Row="0" Background="#4B3621" CornerRadius="12"
-                    BorderBrush="#6F4E37" BorderThickness="2" Padding="8">
+            <Border Grid.Row="0" Background="#4B3621" CornerRadius="12" BorderBrush="#6F4E37" BorderThickness="2" Padding="8">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-
-                    <TextBlock Grid.Row="0" Text="ВЫДАЧА" FontSize="12" FontWeight="Bold"
-                               Foreground="#D2B48C" HorizontalAlignment="Center" Margin="0,2,0,6"/>
-
-                    <Border Grid.Row="1" Background="#1A1005" CornerRadius="8"
-                            BorderBrush="#8B6F47" BorderThickness="2" Margin="0,0,0,6">
+                    <TextBlock Grid.Row="0" Text="ВЫДАЧА" FontSize="12" FontWeight="Bold" Foreground="#D2B48C" HorizontalAlignment="Center" Margin="0,2,0,6"/>
+                    <Border Grid.Row="1" Background="#1A1005" CornerRadius="8" BorderBrush="#8B6F47" BorderThickness="2" Margin="0,0,0,6">
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                             <TextBlock Text="🍵" FontSize="34" HorizontalAlignment="Center" Opacity="0.4"/>
-                            <TextBlock Text="Стакан" Foreground="#8B6F47" FontSize="10"
-                                       HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                            <TextBlock Text="появится здесь" Foreground="#8B6F47" FontSize="9"
-                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Стакан" Foreground="#8B6F47" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            <TextBlock Text="появится здесь" Foreground="#8B6F47" FontSize="9" HorizontalAlignment="Center"/>
                         </StackPanel>
                     </Border>
-
-                    <TextBlock Grid.Row="2" Text="Возьмите напиток" FontSize="10"
-                               Foreground="#D2B48C" HorizontalAlignment="Center" Margin="0,2,0,2"/>
+                    <TextBlock Grid.Row="2" Text="Возьмите напиток" FontSize="10" Foreground="#D2B48C" HorizontalAlignment="Center" Margin="0,2,0,2"/>
                 </Grid>
             </Border>
 
-            <Border Grid.Row="1" Background="#A67B5B" CornerRadius="12"
-                    Padding="10" Margin="0,8,0,0" BorderBrush="#8B6F47" BorderThickness="2">
+            <Border Grid.Row="1" Background="#A67B5B" CornerRadius="12" Padding="10" Margin="0,8,0,0" BorderBrush="#8B6F47" BorderThickness="2">
                 <StackPanel VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="💰" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                        <TextBlock Text="Сдача" FontWeight="Bold" FontSize="12"
-                                   Foreground="#FFF8F0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Сдача" FontWeight="Bold" FontSize="12" Foreground="#FFF8F0" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock Text="0 ₽" FontSize="20" FontWeight="Bold"
-                               Foreground="#FFF8F0" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                    <TextBlock x:Name="ChangeMoneyText" Text="0 ₽" FontSize="20" FontWeight="Bold" Foreground="#FFF8F0" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                 </StackPanel>
             </Border>
+        </Grid>
+
+        <!-- Оверлей анимации -->
+        <Grid x:Name="BrewingOverlay" Grid.RowSpan="4" Background="#80000000" Visibility="Collapsed">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="☕" FontSize="80" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="BrewingText" Text="Готовим..." Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,20,0,0"/>
+                <ProgressBar x:Name="BrewProgress" Height="10" Width="300" Margin="0,10,0,0" Maximum="100"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
