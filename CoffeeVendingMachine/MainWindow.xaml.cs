@@ -1,51 +1,46 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using CoffeeVendingMachine.Models;
 using CoffeeVendingMachine.Services;
-using CoffeeVendingMachine.Models;
+using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Input;
 
 namespace CoffeeVendingMachine
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private Config _config;
+
         public MainWindow()
         {
             InitializeComponent();
-            //Гркзим список кофе из coffee.json
-            var coffees = CoffeeLoader.Load();
 
-            // DataContext - Сам строит карточки
-            DataContext = new
-            {
-                CoffeeList = coffees
-            };
+            // 1. Загружаем меню из menu.json (список наследников Drink)
+            var menu = CoffeeLoader.LoadMenu();
+
+            // 2. Загружаем настройки из config.json (цены, объемы)
+            _config = CoffeeLoader.LoadConfig();
+
+            // 3. Устанавливаем контекст данных. 
+            // ItemsControl в XAML сам отрисует карточки на основе этого списка.
+            DataContext = new { CoffeeList = menu };
         }
 
-        //Обробатываем клик по карточке
+        // Обработчик клика по карточке
         private void CoffeeCard_Click(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Border border && border.Tag is Coffee selectedCoffee)
+            // Получаем объект напитка из Tag карточки
+            if (sender is Border border && border.Tag is Drink selectedDrink)
             {
-                var customizationWindow = new CustomizationWindow(selectedCoffee)
-                {
-                    Owner = this
-                };
+                // Открываем окно настройки, передавая туда напиток и конфиг
+                var win = new CustomizationWindow(selectedDrink, _config) { Owner = this };
 
-                bool? result = customizationWindow.ShowDialog();
-
-                if (result == true)
+                // ShowDialog блокирует главное окно, пока не закроется окно настройки
+                if (win.ShowDialog() == true)
                 {
-                    // Пока так
-                    MessageBox.Show($"Напиток {selectedCoffee.Name} успешно выбран!\n(Здесь будет логика оплаты)", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Сюда мы добавим логику оплаты и приготовления
+                    MessageBox.Show($"{selectedDrink.Name} готовится!", "Успех");
                 }
-
             }
         }
-
-
     }
 }
