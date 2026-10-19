@@ -2,49 +2,49 @@
   {
     "type": "CoffeeDrink",
     "name": "Капучино",
-    "price": 150,
+    "basePrice": 150,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Мокачино",
-    "price": 180,
+    "basePrice": 180,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Раф",
-    "price": 200,
+    "basePrice": 200,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Латте",
-    "price": 160,
+    "basePrice": 160,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Эспрессо",
-    "price": 150,
+    "basePrice": 150,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Двойной Эспрессо",
-    "price": 180,
+    "basePrice": 180,
     "icon": "☕",
     "coffeeType": "Arabica"
   },
   {
     "type": "CoffeeDrink",
     "name": "Флэт Уайт",
-    "price": 170,
+    "basePrice": 170,
     "icon": "☕",
     "coffeeType": "Arabica"
   }
