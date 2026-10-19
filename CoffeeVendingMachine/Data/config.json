@@ -1,0 +1,19 @@
+{
+  "syrupPrice": 30,
+  "toppingPrice": 20,
+  "extraEspressoShotPrice": 40,
+  "cupSize": [
+    {
+      "name": "Маленький (200 мл)",
+      "volume": 200
+    },
+    {
+      "name": "Средний (300 мл)",
+      "volume": 300
+    },
+    {
+      "name": "Больщой (400 мл)",
+      "volume": 400
+    }
+  ]
+}

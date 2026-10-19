@@ -9,11 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\coffee.json" />
+    <None Remove="Data\config.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\coffee.json">
+    <Content Include="Data\config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\menu.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

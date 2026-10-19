@@ -1,0 +1,51 @@
+[
+  {
+    "type": "CoffeeDrink",
+    "name": "Капучино",
+    "price": 150,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Мокачино",
+    "price": 180,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Раф",
+    "price": 200,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Латте",
+    "price": 160,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Эспрессо",
+    "price": 150,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Двойной Эспрессо",
+    "price": 180,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  },
+  {
+    "type": "CoffeeDrink",
+    "name": "Флэт Уайт",
+    "price": 170,
+    "icon": "☕",
+    "coffeeType": "Arabica"
+  }
+]

@@ -1,43 +1,59 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using CoffeeVendingMachine.Models;
 
 namespace CoffeeVendingMachine
 {
-    /// <summary>
-    /// Логика взаимодействия для CustomizationWindow.xaml
-    /// </summary>
     public partial class CustomizationWindow : Window
     {
-        //Передаёим кофе из главного меню
-        public Coffee SelectedCoffee { get; private set; }
+        // Ссылка на выбранный напиток
+        public Drink SelectedDrink { get; private set; }
 
-        public CustomizationWindow(Coffee coffee)
+        // Ссылка на настройки автомата
+        private Config _config;
+
+        public CustomizationWindow(Drink drink, Config config)
         {
             InitializeComponent();
+            SelectedDrink = drink;
+            _config = config;
 
-            SelectedCoffee = coffee;
+            // 1. Выводим имя напитка
+            CoffeeNameText.Text = drink.Name;
 
-            CoffeeNameText.Text = coffee.Name; // Название кофе в заголовок 
+            // Проверяем, является ли объект наследником CoffeeDrink.
+            // Если да — приводим тип и получаем доступ к свойству CoffeeType.
+            if (drink is CoffeeDrink coffee)
+            {
+                DrinkTypeText.Text = $"Кофе ({coffee.CoffeeType})";
+            }
+
+            // Берем список объемов из config.json и создаем для каждого кнопку.
+            foreach (var size in config.CupSizes)
+            {
+                var rb = new RadioButton
+                {
+                    Content = size.Name,
+                    Tag = size.Volume, // Сохраняем объем в Tag, чтобы потом прочитать
+                    Margin = new Thickness(0, 4, 15, 4)
+                };
+                SizesPanel.Children.Add(rb);
+            }
+
+            //Обновляем заголовки, подставляя цены из конфига
+            SyrupHeader.Text = $"Сиропы (+{config.SyrupPrice} ₽):";
+            ToppingHeader.Text = $"Топпинги (+{config.ToppingPrice} ₽):";
+            TotalPriceText.Text = $"Итого: {drink.BasePrice} ₽";
         }
-        
-        //Кнопка "Отмена" - закрыть окно
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
 
-        // Кнопка "Добавить в заказ"
+        // Закрыть без сохранения
+        private void Cancel_Click(object sender, RoutedEventArgs e) => Close();
+
+        // Закрыть с подтверждением
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            // Нужно потом прописать логику и объединить с главной
-
-            this.DialogResult = true;
-            this.Close();
-
+            DialogResult = true;
+            Close();
         }
-
-
-
     }
 }
