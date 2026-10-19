@@ -208,5 +208,20 @@
                 </StackPanel>
             </Border>
         </Grid>
+        <!-- Кнопки для теста (внесение денег) -->
+        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,20,200">
+            <Button Content="+50 ₽" Width="60" Height="30" Margin="5" Click="Insert50_Click"/>
+            <Button Content="+100 ₽" Width="60" Height="30" Margin="5" Click="Insert100_Click"/>
+            <Button Content="+500 ₽" Width="60" Height="30" Margin="5" Click="Insert500_Click"/>
+        </StackPanel>
+
+        <!-- Оверлей анимации (по умолчанию скрыт) -->
+        <Grid x:Name="BrewingOverlay" Grid.RowSpan="4" Background="#80000000" Visibility="Collapsed">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="☕" FontSize="80" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="BrewingText" Text="Готовим..." Foreground="White" FontSize="24" FontWeight="Bold" Margin="0,20,0,0"/>
+                <ProgressBar x:Name="BrewProgress" Height="10" Width="300" Margin="0,10,0,0" Maximum="100"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

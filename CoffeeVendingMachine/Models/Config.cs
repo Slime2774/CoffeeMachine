@@ -13,6 +13,9 @@ namespace CoffeeVendingMachine.Models
 
         [JsonPropertyName("volume")]
         public int Volume { get; set; }
+
+        [JsonPropertyName("extraPrice")]
+        public decimal ExtraPrice {  get; set; } // Доплата за размер
     }
 
     public class Config

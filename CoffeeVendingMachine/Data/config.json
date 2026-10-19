@@ -5,15 +5,18 @@
   "cupSize": [
     {
       "name": "Маленький (200 мл)",
-      "volume": 200
+      "volume": 200,
+      "extraPrice": 0
     },
     {
       "name": "Средний (300 мл)",
-      "volume": 300
+      "volume": 300,
+      "extraPrice": 20
     },
     {
       "name": "Больщой (400 мл)",
-      "volume": 400
+      "volume": 400,
+      "extraPrice": 40
     }
   ]
 }
