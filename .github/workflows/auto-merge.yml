@@ -11,9 +11,11 @@ jobs:
       contents: write
       pull-requests: write
 
-    steps:
+      steps:
       - name: Enable auto-merge for PR
-        run: gh pr merge --auto --squash "$PR_URL"
+        # Возвращаем --squash, без него CI выдаёт ошибку
+        # Добавляем --delete-branch, чтобы ветка автоматически удалялась после слияния
+        run: gh pr merge --auto --squash --delete-branch "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
