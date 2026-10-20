@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls; // Для Border
+using System.Windows.Controls;
 using System.Windows.Input;
 using CoffeeVendingMachine.Models;
 using CoffeeVendingMachine.Services;
@@ -36,6 +36,7 @@ namespace CoffeeVendingMachine
         private async void CoffeeCard_Click(object sender, MouseButtonEventArgs e)
         {
             if (_isBrewing) return;
+
             if (sender is Border border && border.Tag is Drink selectedDrink)
             {
                 if (_currentBalance < selectedDrink.BasePrice)
@@ -65,25 +66,48 @@ namespace CoffeeVendingMachine
             _currentBalance = 0;
 
             InsertedMoneyText.Text = "0 ₽";
-            ChangeMoneyText.Text = $"{change} ₽";
+            ChangeMoneyText.Text = $"{change} ₽"; // Блок сдачи (работает как раньше)
 
-            BrewingOverlay.Visibility = Visibility.Visible;
-            BrewingText.Text = $"Готовим {drink.Name}...";
+            // --- АНИМАЦИЯ ---
+
+            // 1. Прячем заглушку
+            EmptyCupPlaceholder.Visibility = Visibility.Collapsed;
+
+            // 2. Показываем стакан (без анимации выезда, просто Opacity = 1)
+            CoffeeCup.Opacity = 1;
+            CoffeeLiquid.Height = 0;
+
+            // 3. Показываем прогресс-бар
+            BrewProgress.Visibility = Visibility.Visible;
             BrewProgress.Value = 0;
+            BrewingText.Text = "Готовим...";
+            TakeCupText.Opacity = 0;
 
+            // 4. Анимация наполнения
             for (int i = 0; i <= 30; i++)
             {
-                BrewProgress.Value = i * (100.0 / 30.0);
+                BrewProgress.Value = i * (100.0 / 30.0);      // Прогресс-бар
+                CoffeeLiquid.Height = (i / 30.0) * 80.0;      // Жидкость растет до 80 пикселей
                 await Task.Delay(100);
             }
 
-            BrewingOverlay.Visibility = Visibility.Collapsed;
-            MessageBox.Show($"Ваш {drink.Name} готов!\nЗаберите сдачу: {change} ₽", "Готово");
+            // --- КОНЕЦ АНИМАЦИИ ---
 
+            BrewingText.Text = "Готово!";
+            BrewProgress.Visibility = Visibility.Collapsed;
+            TakeCupText.Opacity = 1; // Показываем "Заберите напиток!"
+
+            StatusText.Text = "Заберите кофе и сдачу";
+            _isBrewing = false;
+
+            // Ждем 5 секунд и сбрасываем визуал
             await Task.Delay(5000);
+
+            CoffeeCup.Opacity = 0;
+            EmptyCupPlaceholder.Visibility = Visibility.Visible;
+            TakeCupText.Opacity = 0;
             ChangeMoneyText.Text = "0 ₽";
             StatusText.Text = "Выберите напиток";
-            _isBrewing = false;
         }
     }
 }
