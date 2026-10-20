@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="CoffeeVendingMachine.Tests/CoffeeVendingMachine.Tests.csproj" />
   <Project Path="CoffeeVendingMachine/CoffeeVendingMachine.csproj" />
 </Solution>
