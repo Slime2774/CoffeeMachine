@@ -9,7 +9,7 @@ on:
     types: [ published ]
 
 jobs:
-  build:
+  build-and-test: # <-- Переименовали джобу, чтобы было понятно, что она делает
     runs-on: windows-latest
 
     steps:
@@ -28,8 +28,9 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
-      continue-on-error: true
+      # Убрали continue-on-error, теперь падение тестов остановит пайплайн!
+      # Также добавили Release, чтобы тесты запускались для той сборки, которую мы только что сделали
+      run: dotnet test --configuration Release --no-build --verbosity normal
 
     - name: Publish
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
