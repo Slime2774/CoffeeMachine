@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Width="750" Height="800">
     <UserControl.Resources>
-        <!-- Стиль карточек кофе -->
         <Style x:Key="CoffeeCardStyle" TargetType="Border">
             <Setter Property="Background" Value="#1A1A1A"/>
             <Setter Property="CornerRadius" Value="8"/>
@@ -20,12 +19,10 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!-- Текстура дерева -->
         <LinearGradientBrush x:Key="WoodStripe" StartPoint="0,0" EndPoint="1,0">
             <GradientStop Color="#4A2E1B" Offset="0.0"/>
             <GradientStop Color="#2B1A0F" Offset="1.0"/>
         </LinearGradientBrush>
-        <!-- Стили для RadioButton и CheckBox -->
         <Style TargetType="RadioButton">
             <Setter Property="Foreground" Value="#EEE"/>
             <Setter Property="Margin" Value="0,5,15,5"/>
@@ -87,14 +84,15 @@
                             <Border Grid.Row="1" Background="#0A0A0A" CornerRadius="8" BorderBrush="#333" BorderThickness="1" Padding="10" Margin="0,0,0,15" Cursor="Hand" MouseLeftButtonUp="Change_Click">
                                 <StackPanel>
                                     <TextBlock Text="СДАЧА" Foreground="#444" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="ChangeMoneyText" Text="0 ₽" FontSize="22" FontWeight="Bold" Foreground="#D4A373" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                    <WrapPanel x:Name="ChangeCoinsPanel" HorizontalAlignment="Center" Margin="0,5,0,0" MinHeight="20"/>
+                                    <TextBlock x:Name="ChangeMoneyText" Text="0 ₽" FontSize="20" FontWeight="Bold" Foreground="#D4A373" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Border>
                             <Button Grid.Row="2" VerticalAlignment="Bottom" Content="⚙ Настройки" Background="#222" Foreground="#888" BorderThickness="0" Click="ToggleAdmin_Click"/>
                         </Grid>
                     </Border>
 
-                    <!-- ЦЕНТРАЛЬНЫЙ ЭКРАН -->
+                    <!-- ЦЕНТРАЛЬНЫЙ ЭКРАН (Внутри 4 слоя) -->
                     <Border Grid.Column="1" Background="#0A0A0A" CornerRadius="10" BorderBrush="#333" BorderThickness="2" Margin="15">
                         <Grid>
                             <!-- Слой 1: Меню -->
@@ -141,15 +139,12 @@
                                     <StackPanel>
                                         <TextBlock Text="ОБЪЁМ:" Foreground="#666" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <WrapPanel x:Name="SizesPanel" Margin="0,0,0,15"/>
-
                                         <TextBlock Text="КРЕПОСТЬ:" Foreground="#666" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <WrapPanel Margin="0,0,0,15">
                                             <RadioButton x:Name="ShotStandard" Content="Стандарт" IsChecked="True" Tag="0" Checked="Option_Changed" GroupName="Shots"/>
                                             <RadioButton x:Name="Shot1" Content="+1 шот" Tag="1" Checked="Option_Changed" GroupName="Shots"/>
                                             <RadioButton x:Name="Shot2" Content="+2 шота" Tag="2" Checked="Option_Changed" GroupName="Shots"/>
                                         </WrapPanel>
-
-                                        <!-- ИЗМЕНЕНО: Добавлены x:Name и GroupName для сахара -->
                                         <TextBlock Text="САХАР:" Foreground="#666" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <WrapPanel Margin="0,0,0,15">
                                             <RadioButton x:Name="Sugar0" Content="Без сахара" IsChecked="True" GroupName="Sugar"/>
@@ -157,7 +152,6 @@
                                             <RadioButton x:Name="Sugar2" Content="2 ложки" GroupName="Sugar"/>
                                             <RadioButton x:Name="Sugar3" Content="3 ложки" GroupName="Sugar"/>
                                         </WrapPanel>
-
                                         <TextBlock x:Name="SyrupHeader" Text="СИРОПЫ:" Foreground="#666" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <WrapPanel x:Name="SyrupPanel" Margin="0,0,0,15">
                                             <CheckBox Content="Карамель" Tag="Карамель" Checked="Option_Changed" Unchecked="Option_Changed"/>
@@ -217,6 +211,29 @@
                                     <Button Grid.Column="0" Content="Отмена" Height="45" Margin="0,0,10,0" Background="#222" Foreground="#FFF" BorderThickness="0" Click="CancelPayment_Click"/>
                                     <Button Grid.Column="1" x:Name="ConfirmCashBtn" Content="Готово" Height="45" Margin="10,0,0,0" Background="#4CAF50" Foreground="#FFF" FontWeight="Bold" BorderThickness="0" Click="ConfirmCash_Click" IsEnabled="False"/>
                                 </Grid>
+                            </Grid>
+
+                            <!-- Слой 4: ЗАСТАВКА -->
+                            <Grid x:Name="ScreenSaverView" Visibility="Collapsed" Background="#0A0A0A" Cursor="Hand" MouseLeftButtonUp="ScreenSaver_Click">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="☕" FontSize="60" HorizontalAlignment="Center" Margin="0,0,0,15">
+                                        <TextBlock.Triggers>
+                                            <EventTrigger RoutedEvent="Loaded">
+                                                <BeginStoryboard>
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.3" To="1.0" Duration="0:0:1.5" AutoReverse="True"/>
+                                                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" From="1.0" To="1.1" Duration="0:0:1.5" AutoReverse="True"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </TextBlock.Triggers>
+                                        <TextBlock.RenderTransform>
+                                            <ScaleTransform CenterX="30" CenterY="30"/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+                                    <TextBlock Text="Прикоснитесь к экрану" Foreground="#D4A373" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="чтобы выбрать напиток" Foreground="#666" FontSize="12" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                </StackPanel>
                             </Grid>
                         </Grid>
                     </Border>
@@ -330,7 +347,6 @@
                             </Style>
                         </TabControl.Resources>
 
-                        <!-- Вкладка 1: Запасы -->
                         <TabItem Header="Запасы">
                             <Border Background="#111" Padding="15" CornerRadius="0,5,5,5">
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -340,45 +356,37 @@
                                             <ProgressBar Height="20" Value="{Binding Inventory.CoffeeBeans}" Maximum="{Binding Inventory.MaxCoffee}" Foreground="#D4A373" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.CoffeeBeans, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
-
                                         <TextBlock Text="Вода (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <Grid Margin="0,0,0,15">
                                             <ProgressBar Height="20" Value="{Binding Inventory.Water}" Maximum="{Binding Inventory.MaxWater}" Foreground="#4CAF50" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.Water, StringFormat={}{0} / 5000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
-
                                         <TextBlock Text="Молоко (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <Grid Margin="0,0,0,15">
                                             <ProgressBar Height="20" Value="{Binding Inventory.Milk}" Maximum="{Binding Inventory.MaxMilk}" Foreground="#FFF" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.Milk, StringFormat={}{0} / 2000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#111" FontWeight="Bold"/>
                                         </Grid>
-
-                                        <!-- ИЗМЕНЕНО: Добавлены прогресс-бары для Сахара и Сиропа -->
                                         <TextBlock Text="Сахар (г):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <Grid Margin="0,0,0,15">
                                             <ProgressBar Height="20" Value="{Binding Inventory.Sugar}" Maximum="{Binding Inventory.MaxSugar}" Foreground="#E67E22" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.Sugar, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
-
                                         <TextBlock Text="Сироп (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <Grid Margin="0,0,0,15">
                                             <ProgressBar Height="20" Value="{Binding Inventory.Syrup}" Maximum="{Binding Inventory.MaxSyrup}" Foreground="#9B59B6" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.Syrup, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
-
                                         <TextBlock Text="Стаканчики:" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
                                         <Grid Margin="0,0,0,15">
                                             <ProgressBar Height="20" Value="{Binding Inventory.Cups}" Maximum="{Binding Inventory.MaxCups}" Foreground="#3498DB" Background="#222"/>
                                             <TextBlock Text="{Binding Inventory.Cups, StringFormat={}{0} / 50}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
                                         </Grid>
-
                                         <Button Content="Пополнить всё до максимума" Background="#4CAF50" Foreground="White" FontWeight="Bold" Margin="0,20,0,0" Height="40" Click="RefillInventory_Click"/>
                                     </StackPanel>
                                 </ScrollViewer>
                             </Border>
                         </TabItem>
 
-                        <!-- Вкладка 2: Редактор Меню -->
                         <TabItem Header="Редактор Меню">
                             <Border Background="#111" Padding="10" CornerRadius="0,5,5,5">
                                 <Grid>
