@@ -1,17 +1,16 @@
-﻿using System;
+﻿using CoffeeVendingMachine.Models;
+using CoffeeVendingMachine.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Media; // Для звуков
+using System.Media;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using CoffeeVendingMachine.Models;
-using CoffeeVendingMachine.Services;
 using System.Windows.Threading;
 
 namespace CoffeeVendingMachine
@@ -32,61 +31,49 @@ namespace CoffeeVendingMachine
         private decimal _insertedCash = 0;
         private decimal _paymentChange = 0;
 
+        private SoundPlayer? _soundPlayer;
         private DispatcherTimer _idleTimer;
         private int _idleSeconds = 0;
-        private const int IdleTimeoutSeconds = 15; // Через сколько секунд включать заставку (30 сек)
-
-        // Плеер для звуков
-        private SoundPlayer? _soundPlayer;
+        private const int IdleTimeoutSeconds = 15;
 
         public CoffeeMachineView(string machineId)
         {
             InitializeComponent();
             MachineId = machineId;
             DataContext = this;
-            _config = CoffeeLoader.LoadConfig();
+
+            try { _config = CoffeeLoader.LoadConfig(); } catch { }
 
             LoadMenuFromJson();
             UpdateCupStackVisual();
 
-            // ДОБАВЛЕНО: Инициализация таймера
             _idleTimer = new DispatcherTimer();
             _idleTimer.Interval = TimeSpan.FromSeconds(1);
             _idleTimer.Tick += IdleTimer_Tick;
             _idleTimer.Start();
 
-            // ДОБАВЛЕНО: Сбрасываем таймер при клике на любую часть автомата
             this.PreviewMouseDown += (s, e) => ResetIdleTimer();
         }
 
-
-        // --- ВОСПРОИЗВЕДЕНИЕ ЗВУКОВ ---
+        // --- ЗВУКИ ---
         private void PlaySound(string fileName)
         {
-            // Сначала останавливаем предыдущий звук, если он играет
             _soundPlayer?.Stop();
             _soundPlayer = null;
 
             try
             {
                 string path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sounds", fileName);
-
-                // Проверка: если файла нет, просто выходим
                 if (File.Exists(path))
                 {
                     _soundPlayer = new SoundPlayer(path);
                     _soundPlayer.Play();
                 }
             }
-            catch
-            {
-                // Если произошла ошибка воспроизведения (битый файл, нет кодеков), 
-                // просто игнорируем её, чтобы не ломать автомат.
-                _soundPlayer = null;
-            }
+            catch { _soundPlayer = null; }
         }
 
-        // --- ЗАГРУЗКА И СОХРАНЕНИЕ JSON ---
+        // --- ЗАГРУЗКА JSON ---
         private void LoadMenuFromJson()
         {
             string fileName = $"menu_{MachineId}.json";
@@ -135,11 +122,87 @@ namespace CoffeeVendingMachine
             if (MenuDataGrid.SelectedItem is Drink drink) MenuList.Remove(drink);
         }
 
-        // --- ЛОГИКА АВТОМАТА ---
+        // --- АДМИНКА ---
+        private void ToggleAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            MenuView.Visibility = Visibility.Collapsed;
+            AdminLoginView.Visibility = Visibility.Visible;
+            AdminPasswordBox.Clear();
+            AdminPasswordBox.Focus();
+            ResetIdleTimer();
+        }
+
+        private void LoginAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            if (AdminPasswordBox.Password == "admin")
+            {
+                AdminLoginView.Visibility = Visibility.Collapsed;
+                AdminPanelView.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MessageBox.Show("Неверный пароль!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                AdminPasswordBox.Clear();
+            }
+        }
+
+        private void CancelAdminLogin_Click(object sender, RoutedEventArgs e)
+        {
+            AdminLoginView.Visibility = Visibility.Collapsed;
+            MenuView.Visibility = Visibility.Visible;
+        }
+
+        private void CloseAdminPanel_Click(object sender, RoutedEventArgs e)
+        {
+            AdminPanelView.Visibility = Visibility.Collapsed;
+            MenuView.Visibility = Visibility.Visible;
+        }
+
+        private void RefillInventory_Click(object sender, RoutedEventArgs e)
+        {
+            Inventory.Cups = Inventory.MaxCups;
+            Inventory.CoffeeBeans = Inventory.MaxCoffee;
+            Inventory.Water = Inventory.MaxWater;
+            Inventory.Milk = Inventory.MaxMilk;
+            Inventory.Sugar = Inventory.MaxSugar;
+            Inventory.Syrup = Inventory.MaxSyrup;
+            UpdateCupStackVisual();
+        }
+
+        // --- ЗАСТАВКА ---
+        private void IdleTimer_Tick(object? sender, EventArgs e)
+        {
+            if (_isBrewing || _isCupReady || AdminPanelView.Visibility == Visibility.Visible || AdminLoginView.Visibility == Visibility.Visible)
+            {
+                _idleSeconds = 0;
+                return;
+            }
+
+            if (MenuView.Visibility == Visibility.Visible)
+            {
+                _idleSeconds++;
+                if (_idleSeconds >= IdleTimeoutSeconds) ShowScreenSaver();
+            }
+        }
+
+        private void ResetIdleTimer()
+        {
+            _idleSeconds = 0;
+            if (ScreenSaverView.Visibility == Visibility.Visible)
+            {
+                ScreenSaverView.Visibility = Visibility.Collapsed;
+                MenuView.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ShowScreenSaver() => ScreenSaverView.Visibility = Visibility.Visible;
+        private void ScreenSaver_Click(object sender, MouseButtonEventArgs e) => ResetIdleTimer();
+
+        // --- ЛОГИКА ПОКУПКИ ---
         private void CoffeeCard_Click(object sender, MouseButtonEventArgs e)
         {
             if (_isBrewing || _isCupReady) return;
-            if (Inventory.Cups <= 0) { StatusText.Text = "Нет стаканов! Пополните."; return; }
+            if (Inventory.Cups <= 0) { StatusText.Text = "Нет стаканов!"; return; }
 
             if (sender is Border border && border.Tag is Drink selectedDrink)
             {
@@ -182,7 +245,6 @@ namespace CoffeeVendingMachine
 
                 MenuView.Visibility = Visibility.Collapsed;
                 CustomizationView.Visibility = Visibility.Visible;
-                PaymentView.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -223,11 +285,10 @@ namespace CoffeeVendingMachine
             ConfirmCashBtn.IsEnabled = false; PayByCardBtn.IsEnabled = true; PayByCardBtn.Content = "💳 ОПЛАТИТЬ КАРТОЙ";
         }
 
-        // --- ОПЛАТА ---
         private async void PayByCard_Click(object sender, RoutedEventArgs e)
         {
             PayByCardBtn.IsEnabled = false; PayByCardBtn.Content = "Обработка...";
-            PlaySound("beep.wav"); // ЗВУК ТЕРМИНАЛА
+            PlaySound("beep.wav");
             await Task.Delay(1500);
             await StartBrewingAsync(0);
         }
@@ -236,7 +297,7 @@ namespace CoffeeVendingMachine
         {
             if (sender is Button btn && decimal.TryParse(btn.Tag?.ToString(), out decimal amount))
             {
-                PlaySound("coin.wav"); // ЗВУК МОНЕТЫ
+                PlaySound("coin.wav");
                 _insertedCash += amount;
                 InsertedText.Text = $"{_insertedCash} ₽";
                 if (_insertedCash >= _finalPrice)
@@ -260,13 +321,11 @@ namespace CoffeeVendingMachine
             CustomizationView.Visibility = Visibility.Visible;
         }
 
-        // --- ПРИГОТОВЛЕНИЕ ---
         private async Task StartBrewingAsync(decimal change)
         {
             _isBrewing = true;
             _currentChange = change;
 
-            // Расход ресурсов
             int targetVolume = _selectedSize?.Volume ?? 300;
             int waterNeeded = targetVolume / 2;
             int milkNeeded = targetVolume / 2;
@@ -276,15 +335,6 @@ namespace CoffeeVendingMachine
             int syrupsCount = 0;
             foreach (var child in SyrupPanel.Children) if (child is CheckBox cb && cb.IsChecked == true) syrupsCount++;
             int syrupNeeded = syrupsCount * 20;
-
-            if (Inventory.Cups <= 0 || Inventory.Water < waterNeeded ||
-                Inventory.Milk < milkNeeded || Inventory.CoffeeBeans < coffeeNeeded ||
-                Inventory.Sugar < sugarNeeded || Inventory.Syrup < syrupNeeded)
-            {
-                StatusText.Text = "Ошибка: не хватает ресурсов!";
-                _isBrewing = false;
-                return; // Прерываем метод, кофе не готовится, ресурсы не списываются
-            }
 
             Inventory.Cups--;
             Inventory.Water -= waterNeeded;
@@ -304,7 +354,7 @@ namespace CoffeeVendingMachine
             CoffeeCup.Opacity = 1;
             CoffeeLiquid.Height = 0;
 
-            PlaySound("brew.wav"); // ЗВУК ПРИГОТОВЛЕНИЯ
+            PlaySound("brew.wav");
 
             for (int i = 0; i <= 30; i++)
             {
@@ -313,7 +363,6 @@ namespace CoffeeVendingMachine
                 await Task.Delay(100);
             }
 
-            // ИСПРАВЛЕНО: Останавливаем звук, чтобы он не играл дольше, чем готовится кофе
             _soundPlayer?.Stop();
 
             ProgressContainer.Visibility = Visibility.Collapsed;
@@ -322,7 +371,7 @@ namespace CoffeeVendingMachine
 
             if (_currentChange > 0)
             {
-                ShowCoins(_currentChange); // РИСУЕМ МОНЕТЫ
+                ShowCoins(_currentChange);
                 StatusText.Text = "Заберите напиток и сдачу!";
             }
             else
@@ -335,7 +384,6 @@ namespace CoffeeVendingMachine
             _isBrewing = false;
         }
 
-        // --- ОТРИСОВКА 5 МОНЕТ ---
         private void ShowCoins(decimal amount)
         {
             ChangeCoinsPanel.Children.Clear();
@@ -343,12 +391,10 @@ namespace CoffeeVendingMachine
 
             if (amount <= 0) return;
 
-            // Разбиваем сумму ровно на 5 частей (или меньше, если сумма < 5)
             int coinsCount = 5;
             decimal coinValue = Math.Floor(amount / coinsCount);
             decimal remainder = amount - (coinValue * coinsCount);
 
-            // Если сумма слишком маленькая (например, 3 рубля), рисуем 3 монеты по 1 рублю
             if (coinValue == 0)
             {
                 coinsCount = (int)amount;
@@ -359,7 +405,7 @@ namespace CoffeeVendingMachine
             for (int i = 0; i < coinsCount; i++)
             {
                 decimal currentCoin = coinValue;
-                if (i == coinsCount - 1) currentCoin += remainder; // Остаток кидаем в последнюю монету
+                if (i == coinsCount - 1) currentCoin += remainder;
 
                 var coin = new Border
                 {
@@ -383,10 +429,9 @@ namespace CoffeeVendingMachine
                 ChangeCoinsPanel.Children.Add(coin);
             }
 
-            PlaySound("coin.wav"); // ЗВУК ПАДАЮЩИХ МОНЕТ
+            PlaySound("coin.wav");
         }
 
-        // --- ВЫДАЧА ---
         private void Cup_Click(object sender, MouseButtonEventArgs e)
         {
             if (!_isCupReady) return;
@@ -404,37 +449,8 @@ namespace CoffeeVendingMachine
             ChangeMoneyText.Text = "0 ₽";
             ChangeCoinsPanel.Children.Clear();
             _currentChange = 0;
-            PlaySound("coin.wav"); // Звук забора сдачи
+            PlaySound("coin.wav");
             StatusText.Text = _isCupReady ? "Заберите напиток!" : "Выберите напиток";
-        }
-
-        // --- АДМИНКА ---
-        private void ToggleAdmin_Click(object sender, RoutedEventArgs e)
-        {
-            if (AdminPanelView.Visibility == Visibility.Collapsed)
-            {
-                // ТРЕБУЕМ ПАРОЛЬ
-                var passWin = new PasswordWindow { Owner = Window.GetWindow(this) };
-                if (passWin.ShowDialog() == true && passWin.IsAuthenticated)
-                {
-                    AdminPanelView.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                AdminPanelView.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void RefillInventory_Click(object sender, RoutedEventArgs e)
-        {
-            Inventory.Cups = Inventory.MaxCups;
-            Inventory.CoffeeBeans = Inventory.MaxCoffee;
-            Inventory.Water = Inventory.MaxWater;
-            Inventory.Milk = Inventory.MaxMilk;
-            Inventory.Sugar = Inventory.MaxSugar;
-            Inventory.Syrup = Inventory.MaxSyrup;
-            UpdateCupStackVisual();
         }
 
         private void UpdateCupStackVisual()
@@ -456,49 +472,5 @@ namespace CoffeeVendingMachine
                 CupStackPanel.Children.Insert(0, cup);
             }
         }
-
-        // ДОБАВЛЕНО: Логика таймера
-        private void IdleTimer_Tick(object? sender, EventArgs e)
-        {
-            // Если автомат занят (готовит или ждет стакан) или открыта админка — не показываем заставку
-            if (_isBrewing || _isCupReady || AdminPanelView.Visibility == Visibility.Visible)
-            {
-                _idleSeconds = 0;
-                return;
-            }
-
-            // Считаем время только если открыто главное меню
-            if (MenuView.Visibility == Visibility.Visible)
-            {
-                _idleSeconds++;
-                if (_idleSeconds >= IdleTimeoutSeconds)
-                {
-                    ShowScreenSaver();
-                }
-            }
-        }
-
-        private void ResetIdleTimer()
-        {
-            _idleSeconds = 0;
-
-            // Если заставка была включена, убираем её
-            if (ScreenSaverView.Visibility == Visibility.Visible)
-            {
-                ScreenSaverView.Visibility = Visibility.Collapsed;
-                MenuView.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void ShowScreenSaver()
-        {
-            ScreenSaverView.Visibility = Visibility.Visible;
-        }
-
-        private void ScreenSaver_Click(object sender, MouseButtonEventArgs e)
-        {
-            ResetIdleTimer();
-        }
-
     }
 }
