@@ -92,7 +92,7 @@
                         </Grid>
                     </Border>
 
-                    <!-- ЦЕНТРАЛЬНЫЙ ЭКРАН (Внутри 4 слоя) -->
+                    <!-- ЦЕНТРАЛЬНЫЙ ЭКРАН (Содержит 6 слоев) -->
                     <Border Grid.Column="1" Background="#0A0A0A" CornerRadius="10" BorderBrush="#333" BorderThickness="2" Margin="15">
                         <Grid>
                             <!-- Слой 1: Меню -->
@@ -213,7 +213,7 @@
                                 </Grid>
                             </Grid>
 
-                            <!-- Слой 4: ЗАСТАВКА -->
+                            <!-- Слой 4: Заставка -->
                             <Grid x:Name="ScreenSaverView" Visibility="Collapsed" Background="#0A0A0A" Cursor="Hand" MouseLeftButtonUp="ScreenSaver_Click">
                                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <TextBlock Text="☕" FontSize="60" HorizontalAlignment="Center" Margin="0,0,0,15">
@@ -235,6 +235,153 @@
                                     <TextBlock Text="чтобы выбрать напиток" Foreground="#666" FontSize="12" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                                 </StackPanel>
                             </Grid>
+
+                            <!-- Слой 5: Экран входа в админку -->
+                            <Grid x:Name="AdminLoginView" Visibility="Collapsed" Background="#0A0A0A" Margin="10">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="250">
+                                    <TextBlock Text="ВХОД В ПАНЕЛЬ" Foreground="#D4A373" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                                    <TextBlock Text="Введите пароль (admin):" Foreground="#666" FontSize="12" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                                    <PasswordBox x:Name="AdminPasswordBox" Height="35" Background="#222" Foreground="#FFF" BorderBrush="#444" BorderThickness="1" Padding="5" FontSize="16" Margin="0,0,0,15"/>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Content="Отмена" Height="35" Margin="0,0,5,0" Background="#333" Foreground="#FFF" BorderThickness="0" Click="CancelAdminLogin_Click"/>
+                                        <Button Grid.Column="1" Content="Войти" Height="35" Margin="5,0,0,0" Background="#D4A373" Foreground="#111" FontWeight="Bold" BorderThickness="0" Click="LoginAdmin_Click"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Слой 6: АДМИН ПАНЕЛЬ -->
+                            <Grid x:Name="AdminPanelView" Visibility="Collapsed" Background="#0A0A0A" Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="ПАНЕЛЬ АДМИНИСТРАТОРА" FontSize="16" FontWeight="Bold" Foreground="#D4A373" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+
+                                <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+                                    <TabControl.Resources>
+                                        <Style TargetType="TabItem">
+                                            <Setter Property="Background" Value="#222"/>
+                                            <Setter Property="Foreground" Value="#D4A373"/>
+                                            <Setter Property="Padding" Value="10,5"/>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="TabItem">
+                                                        <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5,5,0,0" Margin="0,0,2,0">
+                                                            <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsSelected" Value="True">
+                                                                <Setter Property="Background" Value="#333"/>
+                                                                <Setter Property="Foreground" Value="#FFF"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TabControl.Resources>
+
+                                    <TabItem Header="Запасы">
+                                        <Border Background="#111" Padding="10" CornerRadius="0,5,5,5">
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                <StackPanel>
+                                                    <TextBlock Text="Кофе (г):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.CoffeeBeans}" Maximum="{Binding Inventory.MaxCoffee}" Foreground="#D4A373" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.CoffeeBeans, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <TextBlock Text="Вода (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.Water}" Maximum="{Binding Inventory.MaxWater}" Foreground="#4CAF50" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.Water, StringFormat={}{0} / 5000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <TextBlock Text="Молоко (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.Milk}" Maximum="{Binding Inventory.MaxMilk}" Foreground="#FFF" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.Milk, StringFormat={}{0} / 2000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#111" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <TextBlock Text="Сахар (г):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.Sugar}" Maximum="{Binding Inventory.MaxSugar}" Foreground="#E67E22" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.Sugar, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <TextBlock Text="Сироп (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.Syrup}" Maximum="{Binding Inventory.MaxSyrup}" Foreground="#9B59B6" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.Syrup, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <TextBlock Text="Стаканчики:" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
+                                                    <Grid Margin="0,0,0,10">
+                                                        <ProgressBar Height="15" Value="{Binding Inventory.Cups}" Maximum="{Binding Inventory.MaxCups}" Foreground="#3498DB" Background="#222"/>
+                                                        <TextBlock Text="{Binding Inventory.Cups, StringFormat={}{0} / 50}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                    </Grid>
+                                                    <Button Content="Пополнить всё" Background="#4CAF50" Foreground="White" FontWeight="Bold" Margin="0,10,0,0" Height="30" FontSize="12" Click="RefillInventory_Click"/>
+                                                </StackPanel>
+                                            </ScrollViewer>
+                                        </Border>
+                                    </TabItem>
+
+                                    <TabItem Header="Меню">
+                                        <Border Background="#111" Padding="10" CornerRadius="0,5,5,5">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                    <Button Content="➕ Добавить" Background="#333" Foreground="#FFF" Padding="5,2" FontSize="11" Click="AddMenuItem_Click"/>
+                                                    <Button Content="❌ Удалить" Background="#A52A2A" Foreground="#FFF" Padding="5,2" FontSize="11" Margin="5,0,0,0" Click="DeleteMenuItem_Click"/>
+                                                </StackPanel>
+
+                                                <DataGrid x:Name="MenuDataGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                                          Background="#0A0A0A" RowBackground="#151515" AlternatingRowBackground="#1A1A1A"
+                                                          Foreground="#EEE" BorderBrush="#333" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#333"
+                                                          HeadersVisibility="Column" RowHeaderWidth="0" FontSize="11">
+                                                    <DataGrid.Resources>
+                                                        <Style TargetType="DataGridColumnHeader">
+                                                            <Setter Property="Background" Value="#222"/>
+                                                            <Setter Property="Foreground" Value="#D4A373"/>
+                                                            <Setter Property="Padding" Value="2"/>
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                        </Style>
+                                                        <Style TargetType="DataGridCell">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="Foreground" Value="#EEE"/>
+                                                            <Setter Property="BorderThickness" Value="0"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsSelected" Value="True">
+                                                                    <Setter Property="Background" Value="#333"/>
+                                                                    <Setter Property="Foreground" Value="#D4A373"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </DataGrid.Resources>
+                                                    <DataGrid.Columns>
+                                                        <DataGridTextColumn Header="Название" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                                        <DataGridTextColumn Header="Цена" Binding="{Binding BasePrice, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+                                                        <DataGridTextColumn Header="Иконка" Binding="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+                                                    </DataGrid.Columns>
+                                                </DataGrid>
+
+                                                <Button Grid.Row="2" Content="💾 Сохранить в JSON" Background="#D4A373" Foreground="#111" FontWeight="Bold" Padding="5,2" FontSize="11" Margin="0,5,0,0" Click="SaveJson_Click"/>
+                                            </Grid>
+                                        </Border>
+                                    </TabItem>
+                                </TabControl>
+
+                                <Button Grid.Row="2" Content="Закрыть" Background="#222" Foreground="#FFF" Height="30" FontSize="12" Margin="0,10,0,0" Click="CloseAdminPanel_Click"/>
+                            </Grid>
+
                         </Grid>
                     </Border>
 
@@ -310,137 +457,5 @@
                 </Border>
             </Grid>
         </Border>
-
-        <!-- АДМИН ПАНЕЛЬ -->
-        <Grid x:Name="AdminPanelView" Visibility="Collapsed" Background="#E6000000">
-            <Border Background="#1A1A1A" CornerRadius="10" Width="700" Height="550" BorderBrush="#D4A373" BorderThickness="2">
-                <Grid Margin="20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Text="ПАНЕЛЬ АДМИНИСТРАТОРА" FontSize="20" FontWeight="Bold" Foreground="#D4A373" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-
-                    <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
-                        <TabControl.Resources>
-                            <Style TargetType="TabItem">
-                                <Setter Property="Background" Value="#222"/>
-                                <Setter Property="Foreground" Value="#D4A373"/>
-                                <Setter Property="Padding" Value="15,5"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="TabItem">
-                                            <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="5,5,0,0" Margin="0,0,2,0">
-                                                <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="{TemplateBinding Padding}"/>
-                                            </Border>
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter Property="Background" Value="#333"/>
-                                                    <Setter Property="Foreground" Value="#FFF"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </TabControl.Resources>
-
-                        <TabItem Header="Запасы">
-                            <Border Background="#111" Padding="15" CornerRadius="0,5,5,5">
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                    <StackPanel>
-                                        <TextBlock Text="Кофе (г):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.CoffeeBeans}" Maximum="{Binding Inventory.MaxCoffee}" Foreground="#D4A373" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.CoffeeBeans, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                        </Grid>
-                                        <TextBlock Text="Вода (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.Water}" Maximum="{Binding Inventory.MaxWater}" Foreground="#4CAF50" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.Water, StringFormat={}{0} / 5000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                        </Grid>
-                                        <TextBlock Text="Молоко (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.Milk}" Maximum="{Binding Inventory.MaxMilk}" Foreground="#FFF" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.Milk, StringFormat={}{0} / 2000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#111" FontWeight="Bold"/>
-                                        </Grid>
-                                        <TextBlock Text="Сахар (г):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.Sugar}" Maximum="{Binding Inventory.MaxSugar}" Foreground="#E67E22" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.Sugar, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                        </Grid>
-                                        <TextBlock Text="Сироп (мл):" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.Syrup}" Maximum="{Binding Inventory.MaxSyrup}" Foreground="#9B59B6" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.Syrup, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                        </Grid>
-                                        <TextBlock Text="Стаканчики:" Foreground="#EEE" FontWeight="Bold" Margin="0,0,0,5"/>
-                                        <Grid Margin="0,0,0,15">
-                                            <ProgressBar Height="20" Value="{Binding Inventory.Cups}" Maximum="{Binding Inventory.MaxCups}" Foreground="#3498DB" Background="#222"/>
-                                            <TextBlock Text="{Binding Inventory.Cups, StringFormat={}{0} / 50}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"/>
-                                        </Grid>
-                                        <Button Content="Пополнить всё до максимума" Background="#4CAF50" Foreground="White" FontWeight="Bold" Margin="0,20,0,0" Height="40" Click="RefillInventory_Click"/>
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </Border>
-                        </TabItem>
-
-                        <TabItem Header="Редактор Меню">
-                            <Border Background="#111" Padding="10" CornerRadius="0,5,5,5">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                        <Button Content="➕ Добавить напиток" Background="#333" Foreground="#FFF" Padding="10,5" Click="AddMenuItem_Click"/>
-                                        <Button Content="❌ Удалить выбранное" Background="#A52A2A" Foreground="#FFF" Padding="10,5" Margin="10,0,0,0" Click="DeleteMenuItem_Click"/>
-                                    </StackPanel>
-                                    <DataGrid x:Name="MenuDataGrid" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
-                                              Background="#0A0A0A" RowBackground="#151515" AlternatingRowBackground="#1A1A1A"
-                                              Foreground="#EEE" BorderBrush="#333" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#333"
-                                              HeadersVisibility="Column" RowHeaderWidth="0">
-                                        <DataGrid.Resources>
-                                            <Style TargetType="DataGridColumnHeader">
-                                                <Setter Property="Background" Value="#222"/>
-                                                <Setter Property="Foreground" Value="#D4A373"/>
-                                                <Setter Property="Padding" Value="5"/>
-                                                <Setter Property="FontWeight" Value="Bold"/>
-                                                <Setter Property="BorderBrush" Value="#333"/>
-                                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                                            </Style>
-                                            <Style TargetType="DataGridCell">
-                                                <Setter Property="Background" Value="Transparent"/>
-                                                <Setter Property="Foreground" Value="#EEE"/>
-                                                <Setter Property="BorderThickness" Value="0"/>
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter Property="Background" Value="#333"/>
-                                                        <Setter Property="Foreground" Value="#D4A373"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataGrid.Resources>
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Header="Название" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                                            <DataGridTextColumn Header="Цена (₽)" Binding="{Binding BasePrice, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
-                                            <DataGridTextColumn Header="Иконка" Binding="{Binding Icon, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-                                            <DataGridTextColumn Header="Тип кофе" Binding="{Binding CoffeeType, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                                        <Button Content="💾 Сохранить в JSON" Background="#D4A373" Foreground="#111" FontWeight="Bold" Padding="15,5" Click="SaveJson_Click"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </TabItem>
-                    </TabControl>
-                    <Button Grid.Row="2" Content="Закрыть" Background="#222" Foreground="#FFF" Height="40" Margin="0,15,0,0" Click="ToggleAdmin_Click"/>
-                </Grid>
-            </Border>
-        </Grid>
     </Grid>
 </UserControl>

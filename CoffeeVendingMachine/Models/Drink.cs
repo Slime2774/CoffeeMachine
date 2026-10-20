@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using System.ComponentModel; // ИЗМЕНЕНО: Добавил для работы интерфейса INotifyPropertyChanged
-using System.Runtime.CompilerServices; // ИЗМЕНЕНО: Нужно для CallerMemberName
 
 namespace CoffeeVendingMachine.Models
 {
@@ -10,7 +8,6 @@ namespace CoffeeVendingMachine.Models
     // ИЗМЕНЕНО: Добавил наследование от INotifyPropertyChanged, чтобы DataGrid в Админке видел изменения
     public abstract class Drink : INotifyPropertyChanged
     {
-        // ИЗМЕНЕНО: Создал скрытые поля (переменные) для свойств, чтобы можно было отслеживать их изменение
         private string _name = string.Empty;
         private decimal _basePrice;
         private string _icon = "☕";
@@ -19,25 +16,31 @@ namespace CoffeeVendingMachine.Models
         public string Name
         {
             get => _name;
-            set { _name = value; OnPropertyChanged(); } // ИЗМЕНЕНО: Добавил вызов OnPropertyChanged()
+            set { _name = value; OnPropertyChanged(); }
         }
 
         [JsonPropertyName("basePrice")]
         public decimal BasePrice
         {
             get => _basePrice;
-            set { _basePrice = value; OnPropertyChanged(); } // ИЗМЕНЕНО: Добавил вызов OnPropertyChanged()
+            set
+            {
+                _basePrice = value;
+                OnPropertyChanged();
+                // ИЗМЕНЕНО: Сообщаем интерфейсу, что вычисляемый текст цены тоже изменился
+                OnPropertyChanged(nameof(PriceText));
+            }
         }
 
         [JsonPropertyName("icon")]
         public string Icon
         {
             get => _icon;
-            set { _icon = value; OnPropertyChanged(); } // ИЗМЕНЕНО: Добавил вызов OnPropertyChanged()
+            set { _icon = value; OnPropertyChanged(); }
         }
 
         [JsonIgnore]
-        public virtual string PriceText => $"от {BasePrice:0} ₽"; // Форматирует число: 150 в 150 ₽
+        public virtual string PriceText => $"от {BasePrice:0} ₽";
 
         // ИЗМЕНЕНО: Всё, что ниже, добавлено мной для корректной работы таблицы (DataGrid)
         public event PropertyChangedEventHandler? PropertyChanged;

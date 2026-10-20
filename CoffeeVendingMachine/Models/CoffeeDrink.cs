@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace CoffeeVendingMachine.Models
 {
-    // Наследуемся от Drink. 
-    // ИЗМЕНЕНО: Здесь ничего менять не пришлось, но теперь этот класс автоматически
-    // умеет сообщать интерфейсу об изменениях, благодаря обновлению базового класса Drink.
     public class CoffeeDrink : Drink
     {
+        // ИЗМЕНЕНО: Сделал "полноценное" свойство для работы таблицы
+        private string _coffeeType = "Arabica";
+
         [JsonPropertyName("coffeeType")]
-        public string CoffeeType { get; set; } = "Arabica"; // Нет в базовом классе, Добавил сорт зерна
+        public string CoffeeType
+        {
+            get => _coffeeType;
+            set { _coffeeType = value; OnPropertyChanged(); }
+        }
 
         [JsonIgnore]
         public override string PriceText => $"{BasePrice:0} ₽";
