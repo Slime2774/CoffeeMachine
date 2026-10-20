@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 using CoffeeVendingMachine.Models;
 using System;
 
@@ -9,7 +9,7 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void CalculateTotalPrice_WithSizeShotsAndSyrup_ReturnsCorrectSum()
         {
-            // Этот тест остается прежним, логика цен не менялась
+            // Логика цен не менялась
             var drink = new CoffeeDrink { BasePrice = 150 };
             var size = new CupSize { ExtraPrice = 20 };
             var config = new Config { SyrupPrice = 30, ExtraEspressoShotPrice = 40 };
@@ -22,7 +22,7 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void InventoryDeduction_ComplexOrder_CalculatesCorrectly()
         {
-            // Обновленный тест: проверяем большой заказ (Большой объем, 2 доп. шота, 3 сахара, 2 сиропа)
+            // Ваш новый тест: проверяем большой заказ (Большой объем, 2 доп. шота, 3 сахара, 2 сиропа)
             var inventory = new Inventory();
 
             int targetVolume = 400; // Большой
@@ -30,7 +30,6 @@ namespace CoffeeVendingMachine.Tests
             int sugarLumps = 3; // 3 ложки
             int syrupsCount = 2; // 2 сиропа
 
-            // Логика из нового StartBrewingAsync
             int waterNeeded = targetVolume / 2;
             int milkNeeded = targetVolume / 2;
             int coffeeNeeded = shots * 10;
@@ -55,11 +54,11 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void CalculateCoins_For55Rubles_ReturnsFiveCoins()
         {
-            // Тестируем вашу новую логику разбивки сдачи на монеты (метод ShowCoins)
+            // Ваш новый тест: проверяем разбивку сдачи на монеты
             decimal amount = 55;
             int coinsCount = 5;
-            decimal coinValue = Math.Floor(amount / coinsCount); // 55 / 5 = 11
-            decimal remainder = amount - (coinValue * coinsCount); // 0
+            decimal coinValue = Math.Floor(amount / coinsCount); 
+            decimal remainder = amount - (coinValue * coinsCount); 
 
             Assert.Equal(11, coinValue);
             Assert.Equal(0, remainder);
@@ -68,11 +67,11 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void CalculateCoins_ForSmallChange_ReturnsCorrectNumberOfCoins()
         {
-            // Тестируем крайний случай: сдача 3 рубля
+            // Ваш новый тест: сдача 3 рубля
             decimal amount = 3;
             int coinsCount = 5;
             decimal coinValue = Math.Floor(amount / coinsCount); // 0
-
+            
             if (coinValue == 0)
             {
                 coinsCount = (int)amount; // 3 монеты
@@ -81,6 +80,20 @@ namespace CoffeeVendingMachine.Tests
 
             Assert.Equal(3, coinsCount);
             Assert.Equal(1, coinValue);
+        }
+
+        [Fact]
+        public void InventoryDeduction_WhenResourcesAreLow_ShouldNotAllowNegativeValues()
+        {
+            // Тест из ветки main (проверка на нехватку ресурсов)
+            var inventory = new Inventory();
+            inventory.Cups = 0; // Нет стаканов
+            int targetVolume = 300;
+            int waterNeeded = targetVolume / 2;
+
+            bool hasEnoughResources = inventory.Cups > 0 && inventory.Water >= waterNeeded;
+
+            Assert.False(hasEnoughResources);
         }
     }
 }
