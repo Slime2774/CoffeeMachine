@@ -78,55 +78,16 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <!-- Панель оплаты -->
-            <Grid Grid.Row="2" Margin="0,10,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Оплата картой -->
-                <Border Grid.Column="0" Background="#E8D5B7" CornerRadius="10" Padding="10" Margin="0,0,5,0" BorderBrush="#D2B48C" BorderThickness="1.5">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
-                            <TextBlock Text="💳" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock Text="Оплата картой" FontWeight="Bold" FontSize="12" Foreground="#4B3621" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <Rectangle Height="28" Fill="#FFF8F0" RadiusX="6" RadiusY="6" Stroke="#A67B5B" StrokeThickness="1.5"/>
-                        <TextBlock Text="Приложите карту" Foreground="#8B6F47" FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Баланс -->
-                <Border Grid.Column="1" Background="#FFF8F0" CornerRadius="10" Padding="10" Margin="5,0,5,0" BorderBrush="#A67B5B" BorderThickness="1.5">
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Внесено" Foreground="#8B6F47" FontSize="11" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="InsertedMoneyText" Text="0 ₽" FontSize="22" FontWeight="Bold" Foreground="#6F4E37" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="StatusText" Text="Выберите напиток" Foreground="#A67B5B" FontSize="10" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Купюроприемник -->
-                <Border Grid.Column="2" Background="#E8D5B7" CornerRadius="10" Padding="10" Margin="5,0,0,0" BorderBrush="#D2B48C" BorderThickness="1.5">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
-                            <TextBlock Text="💵" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                            <TextBlock Text="Купюроприёмник" FontWeight="Bold" FontSize="12" Foreground="#4B3621" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,2">
-                            <Button Content="+50 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="50" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
-                            <Button Content="+100 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="100" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
-                            <Button Content="+500 ₽" Width="55" Height="28" Margin="2" Click="InsertMoney_Click" Tag="500" Background="#FDEBD0" Foreground="#6F4E37" FontWeight="Bold" BorderBrush="#D2B48C"/>
-                        </StackPanel>
-                        <TextBlock Text="Нажмите, чтобы внести" Foreground="#8B6F47" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
+            <!-- Панель статуса -->
+            <Border Grid.Row="2" Background="#FFF8F0" CornerRadius="10" Padding="10" Margin="0,10,0,0" BorderBrush="#A67B5B" BorderThickness="1.5">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Статус автомата" Foreground="#8B6F47" FontSize="11" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatusText" Text="Выберите напиток" FontSize="16" FontWeight="Bold" Foreground="#6F4E37" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
         </Grid>
 
         <!-- ПРАВАЯ ЧАСТЬ (Шахта выдачи) -->
-        <!-- VerticalAlignment="Bottom" прижимает всё содержимое к низу -->
         <Grid Grid.Column="1" VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -155,13 +116,9 @@
                                 <TextBlock Text="появится здесь" Foreground="#8B6F47" FontSize="9" HorizontalAlignment="Center"/>
                             </StackPanel>
 
-                            <!-- ВЕКТОРНЫЙ СТАКАН С КЛИПОМ (чтобы не вылезало) -->
+                            <!-- ВЕКТОРНЫЙ СТАКАН С КЛИПОМ -->
                             <Grid x:Name="CoffeeCup" Width="80" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0">
-
-                                <!-- Тень -->
                                 <Ellipse Width="60" Height="10" VerticalAlignment="Bottom" Fill="#000000" Margin="0,0,0,2" Opacity="0.5"/>
-
-                                <!-- Фон стакана (белый) -->
                                 <Path Data="M 10,10 L 70,10 L 60,90 Q 40,100 20,90 Z">
                                     <Path.Fill>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -171,20 +128,13 @@
                                         </LinearGradientBrush>
                                     </Path.Fill>
                                 </Path>
-
-                                <!-- Контейнер для жидкости (обрезается по форме внутренности стакана) -->
                                 <Grid x:Name="CoffeeLiquidContainer">
                                     <Grid.Clip>
                                         <PathGeometry Figures="M 12,12 L 68,12 L 59,88 Q 40,97 21,88 Z" />
                                     </Grid.Clip>
-                                    <!-- Сама жидкость (растет вверх) -->
                                     <Rectangle x:Name="CoffeeLiquid" VerticalAlignment="Bottom" Height="0" Fill="#6F4E37" Margin="10,0,10,0"/>
                                 </Grid>
-
-                                <!-- Обводка стакана (рисуется поверх жидкости) -->
                                 <Path Data="M 10,10 L 70,10 L 60,90 Q 40,100 20,90 Z" Stroke="#8E6645" StrokeThickness="1.5" Fill="Transparent"/>
-
-                                <!-- Крышка -->
                                 <Path Data="M 5,5 L 75,5 L 70,15 L 10,15 Z" Fill="#FAFAFA" Stroke="#DDD" StrokeThickness="1"/>
                             </Grid>
                         </Grid>
@@ -194,13 +144,13 @@
                 </Grid>
             </Border>
 
-            <!-- МАЛЕНЬКИЙ ПРОГРЕСС-БАР ПОД СТАКАНОМ -->
+            <!-- ПРОГРЕСС-БАР -->
             <StackPanel Grid.Row="1" Margin="0,8,0,0" HorizontalAlignment="Center" Width="120">
                 <ProgressBar x:Name="BrewProgress" Height="8" Maximum="100" Background="#222222" Foreground="#E5A96A" BorderThickness="0" Visibility="Collapsed"/>
                 <TextBlock x:Name="BrewingText" Text="" Foreground="#6F4E37" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0"/>
             </StackPanel>
 
-            <!-- Поле сдачи (СДАЧА) -->
+            <!-- Поле сдачи -->
             <Border Grid.Row="2" Background="#A67B5B" CornerRadius="12" Padding="10" Margin="0,8,0,0" BorderBrush="#8B6F47" BorderThickness="2">
                 <StackPanel VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
