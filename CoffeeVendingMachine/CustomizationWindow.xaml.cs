@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using CoffeeVendingMachine.Models;
+using System.Windows.Media;
 
 namespace CoffeeVendingMachine
 {
@@ -50,7 +51,8 @@ namespace CoffeeVendingMachine
                 {
                     Content = size.Name,
                     Tag = size, // Сохраняем объем в Tag, чтобы потом прочитать
-                    Margin = new Thickness(0, 4, 15, 4)
+                    Margin = new Thickness(0, 4, 15, 4),
+                    Foreground = Brushes.White
                 };
                 rb.Checked += Size_Changed;
                 SizesPanel.Children.Add(rb);
