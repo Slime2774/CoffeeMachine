@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <None Remove="Data\config.json" />
+    <None Remove="Sounds\beep.wav" />
+    <None Remove="Sounds\brew.wav" />
+    <None Remove="Sounds\coin.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +20,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\menu.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\beep.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\brew.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\coin.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

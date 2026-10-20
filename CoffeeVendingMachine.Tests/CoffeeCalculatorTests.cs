@@ -1,5 +1,6 @@
-﻿using Xunit;
+using Xunit;
 using CoffeeVendingMachine.Models;
+using System;
 
 namespace CoffeeVendingMachine.Tests
 {
@@ -8,64 +9,90 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void CalculateTotalPrice_WithSizeShotsAndSyrup_ReturnsCorrectSum()
         {
-            // Arrange (Подготовка)
-            var drink = new CoffeeDrink { BasePrice = 150 }; // Капучино
-            var size = new CupSize { ExtraPrice = 20 }; // Средний размер
+            // Логика цен не менялась
+            var drink = new CoffeeDrink { BasePrice = 150 };
+            var size = new CupSize { ExtraPrice = 20 };
             var config = new Config { SyrupPrice = 30, ExtraEspressoShotPrice = 40 };
 
-            // Act (Имитируем логику из CalculateCustomPrice)
-            decimal total = drink.BasePrice;
-            total += size.ExtraPrice; // Выбрали размер
-            total += config.ExtraEspressoShotPrice; // Выбрали +1 шот
-            total += config.SyrupPrice; // Выбрали сироп
+            decimal total = drink.BasePrice + size.ExtraPrice + config.ExtraEspressoShotPrice + config.SyrupPrice;
 
-            // Assert (Проверка)
-            Assert.Equal(240, total); // 150 + 20 + 40 + 30 = 240
+            Assert.Equal(240, total);
         }
 
         [Fact]
-        public void InventoryDeduction_ForMediumCappuccinoWithSugar_CalculatesCorrectly()
+        public void InventoryDeduction_ComplexOrder_CalculatesCorrectly()
         {
-            // Arrange
-            var inventory = new Inventory(); // По умолчанию 50 стаканов, 5000 воды и т.д.
-            int targetVolume = 300; // Средний размер
-            int shots = 1; // Стандарт
-            int sugarLumps = 2; // 2 ложки сахара
+            // Ваш новый тест: проверяем большой заказ (Большой объем, 2 доп. шота, 3 сахара, 2 сиропа)
+            var inventory = new Inventory();
 
-            // Act (Имитируем логику из StartBrewingAsync)
+            int targetVolume = 400; // Большой
+            int shots = 1 + 2; // Стандарт + 2 шота
+            int sugarLumps = 3; // 3 ложки
+            int syrupsCount = 2; // 2 сиропа
+
             int waterNeeded = targetVolume / 2;
             int milkNeeded = targetVolume / 2;
             int coffeeNeeded = shots * 10;
-            int sugarNeeded = sugarLumps * 5;
+            int sugarNeeded = 15; // В вашем коде 3 ложки = 15г
+            int syrupNeeded = syrupsCount * 20;
 
             inventory.Cups--;
             inventory.Water -= waterNeeded;
             inventory.Milk -= milkNeeded;
             inventory.CoffeeBeans -= coffeeNeeded;
             inventory.Sugar -= sugarNeeded;
+            inventory.Syrup -= syrupNeeded;
 
-            // Assert (Проверяем, что остатки уменьшились ровно на столько, на сколько должны)
-            Assert.Equal(49, inventory.Cups); // 50 - 1
-            Assert.Equal(4850, inventory.Water); // 5000 - 150
-            Assert.Equal(1850, inventory.Milk); // 2000 - 150
-            Assert.Equal(990, inventory.CoffeeBeans); // 1000 - 10
-            Assert.Equal(990, inventory.Sugar); // 1000 - 10
+            Assert.Equal(49, inventory.Cups);
+            Assert.Equal(4800, inventory.Water); // 5000 - 200
+            Assert.Equal(1800, inventory.Milk); // 2000 - 200
+            Assert.Equal(970, inventory.CoffeeBeans); // 1000 - 30
+            Assert.Equal(985, inventory.Sugar); // 1000 - 15
+            Assert.Equal(960, inventory.Syrup); // 1000 - 40
+        }
+
+        [Fact]
+        public void CalculateCoins_For55Rubles_ReturnsFiveCoins()
+        {
+            // Ваш новый тест: проверяем разбивку сдачи на монеты
+            decimal amount = 55;
+            int coinsCount = 5;
+            decimal coinValue = Math.Floor(amount / coinsCount); 
+            decimal remainder = amount - (coinValue * coinsCount); 
+
+            Assert.Equal(11, coinValue);
+            Assert.Equal(0, remainder);
+        }
+
+        [Fact]
+        public void CalculateCoins_ForSmallChange_ReturnsCorrectNumberOfCoins()
+        {
+            // Ваш новый тест: сдача 3 рубля
+            decimal amount = 3;
+            int coinsCount = 5;
+            decimal coinValue = Math.Floor(amount / coinsCount); // 0
+            
+            if (coinValue == 0)
+            {
+                coinsCount = (int)amount; // 3 монеты
+                coinValue = 1;
+            }
+
+            Assert.Equal(3, coinsCount);
+            Assert.Equal(1, coinValue);
         }
 
         [Fact]
         public void InventoryDeduction_WhenResourcesAreLow_ShouldNotAllowNegativeValues()
         {
-            // Arrange
+            // Тест из ветки main (проверка на нехватку ресурсов)
             var inventory = new Inventory();
             inventory.Cups = 0; // Нет стаканов
             int targetVolume = 300;
             int waterNeeded = targetVolume / 2;
 
-            // Act & Assert
-            // Имитируем проверку из вашего кода StartBrewingAsync
             bool hasEnoughResources = inventory.Cups > 0 && inventory.Water >= waterNeeded;
 
-            // Проверяем, что система не даст приготовить кофе (условие не выполнится)
             Assert.False(hasEnoughResources);
         }
     }
