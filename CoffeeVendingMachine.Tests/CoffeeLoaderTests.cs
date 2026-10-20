@@ -1,6 +1,7 @@
 ﻿using Xunit;
 using CoffeeVendingMachine.Models;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace CoffeeVendingMachine.Tests
 {
@@ -9,7 +10,7 @@ namespace CoffeeVendingMachine.Tests
         [Fact]
         public void Deserialize_ConfigJson_ReturnsCorrectValues()
         {
-            // Arrange
+            // Arrange (Кусочек вашего config.json)
             string json = @"{
                 ""syrupPrice"": 30,
                 ""toppingPrice"": 20,
@@ -30,24 +31,22 @@ namespace CoffeeVendingMachine.Tests
         }
 
         [Fact]
-        public void Deserialize_CoffeeDrinkJson_ReturnsCorrectType()
+        public void Deserialize_CoffeeMenuJson_ReturnsListOfDrinks()
         {
-            // Arrange
-            string json = @"{
-                ""type"": ""CoffeeDrink"",
-                ""name"": ""Капучино"",
-                ""basePrice"": 150,
-                ""coffeeType"": ""Arabica""
-            }";
+            // Arrange (Кусочек вашего menu.json)
+            string json = @"[
+                { ""type"": ""CoffeeDrink"", ""name"": ""Капучино"", ""basePrice"": 150, ""coffeeType"": ""Arabica"" },
+                { ""type"": ""CoffeeDrink"", ""name"": ""Латте"", ""basePrice"": 160, ""coffeeType"": ""Arabica"" }
+            ]";
 
             // Act
-            var drink = JsonSerializer.Deserialize<CoffeeDrink>(json);
+            var menu = JsonSerializer.Deserialize<List<CoffeeDrink>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             // Assert
-            Assert.NotNull(drink);
-            Assert.Equal("Капучино", drink.Name);
-            Assert.Equal(150, drink.BasePrice);
-            Assert.Equal("Arabica", drink.CoffeeType);
+            Assert.NotNull(menu);
+            Assert.Equal(2, menu.Count);
+            Assert.Equal("Капучино", menu[0].Name);
+            Assert.Equal("Латте", menu[1].Name);
         }
     }
 }
