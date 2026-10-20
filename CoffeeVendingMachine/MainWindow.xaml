@@ -117,8 +117,12 @@
                             </StackPanel>
 
                             <!-- ВЕКТОРНЫЙ СТАКАН С КЛИПОМ -->
-                            <Grid x:Name="CoffeeCup" Width="80" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0">
+                            <!-- Добавлены Cursor="Hand" и MouseLeftButtonUp="Cup_Click" -->
+                            <Grid x:Name="CoffeeCup" Width="80" Height="100" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0"
+                                  Cursor="Hand" MouseLeftButtonUp="Cup_Click">
+
                                 <Ellipse Width="60" Height="10" VerticalAlignment="Bottom" Fill="#000000" Margin="0,0,0,2" Opacity="0.5"/>
+
                                 <Path Data="M 10,10 L 70,10 L 60,90 Q 40,100 20,90 Z">
                                     <Path.Fill>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -128,12 +132,14 @@
                                         </LinearGradientBrush>
                                     </Path.Fill>
                                 </Path>
+
                                 <Grid x:Name="CoffeeLiquidContainer">
                                     <Grid.Clip>
                                         <PathGeometry Figures="M 12,12 L 68,12 L 59,88 Q 40,97 21,88 Z" />
                                     </Grid.Clip>
                                     <Rectangle x:Name="CoffeeLiquid" VerticalAlignment="Bottom" Height="0" Fill="#6F4E37" Margin="10,0,10,0"/>
                                 </Grid>
+
                                 <Path Data="M 10,10 L 70,10 L 60,90 Q 40,100 20,90 Z" Stroke="#8E6645" StrokeThickness="1.5" Fill="Transparent"/>
                                 <Path Data="M 5,5 L 75,5 L 70,15 L 10,15 Z" Fill="#FAFAFA" Stroke="#DDD" StrokeThickness="1"/>
                             </Grid>
@@ -151,7 +157,9 @@
             </StackPanel>
 
             <!-- Поле сдачи -->
-            <Border Grid.Row="2" Background="#A67B5B" CornerRadius="12" Padding="10" Margin="0,8,0,0" BorderBrush="#8B6F47" BorderThickness="2">
+            <!-- Добавлены Cursor="Hand" и MouseLeftButtonUp="Change_Click" -->
+            <Border x:Name="ChangePanel" Grid.Row="2" Background="#A67B5B" CornerRadius="12" Padding="10" Margin="0,8,0,0" BorderBrush="#8B6F47" BorderThickness="2"
+                    Cursor="Hand" MouseLeftButtonUp="Change_Click">
                 <StackPanel VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="💰" FontSize="16" VerticalAlignment="Center" Margin="0,0,6,0"/>
