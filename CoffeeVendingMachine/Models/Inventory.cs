@@ -5,7 +5,7 @@ namespace CoffeeVendingMachine.Models
 {
     public class Inventory : INotifyPropertyChanged
     {
-        private int _cups = 50;
+        private int _cups = 1;
         private int _coffeeBeans = 1000;
         private int _milk = 2000;
         private int _water = 5000;
@@ -19,7 +19,7 @@ namespace CoffeeVendingMachine.Models
         public int Sugar { get => _sugar; set { _sugar = value; OnPropertyChanged(); } } // ИЗМЕНЕНО
         public int Syrup { get => _syrup; set { _syrup = value; OnPropertyChanged(); } } // ИЗМЕНЕНО
 
-        public int MaxCups => 50;
+        public int MaxCups => 20;
         public int MaxCoffee => 1000;
         public int MaxMilk => 2000;
         public int MaxWater => 5000;

@@ -34,7 +34,7 @@ namespace CoffeeVendingMachine
         private SoundPlayer? _soundPlayer;
         private DispatcherTimer _idleTimer;
         private int _idleSeconds = 0;
-        private const int IdleTimeoutSeconds = 15;
+        private const int IdleTimeoutSeconds = 3; // Рекламное окно
 
         public CoffeeMachineView(string machineId)
         {

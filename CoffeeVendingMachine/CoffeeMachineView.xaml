@@ -294,36 +294,90 @@
                                         <Border Background="#111" Padding="10" CornerRadius="0,5,5,5">
                                             <ScrollViewer VerticalScrollBarVisibility="Auto">
                                                 <StackPanel>
+                                                    <!-- КОФЕ -->
                                                     <TextBlock Text="Кофе (г):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.CoffeeBeans}" Maximum="{Binding Inventory.MaxCoffee}" Foreground="#D4A373" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.CoffeeBeans, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.CoffeeBeans"/>
+                                                                    <Binding Path="Inventory.MaxCoffee"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
+                                                    <!-- ВОДА -->
                                                     <TextBlock Text="Вода (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.Water}" Maximum="{Binding Inventory.MaxWater}" Foreground="#4CAF50" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.Water, StringFormat={}{0} / 5000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.Water"/>
+                                                                    <Binding Path="Inventory.MaxWater"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
+                                                    <!-- МОЛОКО -->
                                                     <TextBlock Text="Молоко (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.Milk}" Maximum="{Binding Inventory.MaxMilk}" Foreground="#FFF" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.Milk, StringFormat={}{0} / 2000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#111" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#111" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.Milk"/>
+                                                                    <Binding Path="Inventory.MaxMilk"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
+                                                    <!-- САХАР -->
                                                     <TextBlock Text="Сахар (г):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.Sugar}" Maximum="{Binding Inventory.MaxSugar}" Foreground="#E67E22" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.Sugar, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.Sugar"/>
+                                                                    <Binding Path="Inventory.MaxSugar"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
+                                                    <!-- СИРОП -->
                                                     <TextBlock Text="Сироп (мл):" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.Syrup}" Maximum="{Binding Inventory.MaxSyrup}" Foreground="#9B59B6" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.Syrup, StringFormat={}{0} / 1000}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.Syrup"/>
+                                                                    <Binding Path="Inventory.MaxSyrup"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
+                                                    <!-- СТАКАНЧИКИ -->
                                                     <TextBlock Text="Стаканчики:" Foreground="#EEE" FontSize="11" FontWeight="Bold" Margin="0,0,0,2"/>
                                                     <Grid Margin="0,0,0,10">
                                                         <ProgressBar Height="15" Value="{Binding Inventory.Cups}" Maximum="{Binding Inventory.MaxCups}" Foreground="#3498DB" Background="#222"/>
-                                                        <TextBlock Text="{Binding Inventory.Cups, StringFormat={}{0} / 50}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="10" FontWeight="Bold">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0} / {1}">
+                                                                    <Binding Path="Inventory.Cups"/>
+                                                                    <Binding Path="Inventory.MaxCups"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
                                                     </Grid>
+
                                                     <Button Content="Пополнить всё" Background="#4CAF50" Foreground="White" FontWeight="Bold" Margin="0,10,0,0" Height="30" FontSize="12" Click="RefillInventory_Click"/>
                                                 </StackPanel>
                                             </ScrollViewer>
@@ -373,7 +427,7 @@
                                                     </DataGrid.Columns>
                                                 </DataGrid>
 
-                                                <Button Grid.Row="2" Content="💾 Сохранить в JSON" Background="#D4A373" Foreground="#111" FontWeight="Bold" Padding="5,2" FontSize="11" Margin="0,5,0,0" Click="SaveJson_Click"/>
+                                                <Button Grid.Row="2" Content="💾 Сохранить" Background="#D4A373" Foreground="#111" FontWeight="Bold" Padding="5,2" FontSize="11" Margin="0,5,0,0" Click="SaveJson_Click"/>
                                             </Grid>
                                         </Border>
                                     </TabItem>
