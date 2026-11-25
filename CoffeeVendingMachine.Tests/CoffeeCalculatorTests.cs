@@ -23,7 +23,15 @@ namespace CoffeeVendingMachine.Tests
         public void InventoryDeduction_ComplexOrder_CalculatesCorrectly()
         {
             // Ваш новый тест: проверяем большой заказ (Большой объем, 2 доп. шота, 3 сахара, 2 сиропа)
-            var inventory = new Inventory();
+            var inventory = new Inventory
+            {
+                Cups = 50,
+                Water = 5000,
+                Milk = 2000,
+                CoffeeBeans = 1000,
+                Sugar = 1000,
+                Syrup = 1000
+            };
 
             int targetVolume = 400; // Большой
             int shots = 1 + 2; // Стандарт + 2 шота
