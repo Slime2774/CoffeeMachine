@@ -1,0 +1,9 @@
+[
+  {
+    "type": "CoffeeDrink",
+    "name": "\u041A\u0430\u043F\u0443\u0447\u0438\u043D\u043E",
+    "basePrice": 150,
+    "icon": "\u2615",
+    "coffeeType": "Arabica"
+  }
+]
